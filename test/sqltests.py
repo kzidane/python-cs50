@@ -71,7 +71,7 @@ class SQLTests(unittest.TestCase):
 class MySQLTests(SQLTests):
     @classmethod
     def setUpClass(self):
-        self.db = SQL("mysql://root:root@localhost/cs50_sql_tests")
+        self.db = SQL("mysql://root@localhost/cs50_sql_tests")
 
     def setUp(self):
         self.db.execute("CREATE TABLE cs50 (id INTEGER NOT NULL AUTO_INCREMENT,\
@@ -87,7 +87,7 @@ class MySQLTests(SQLTests):
 class PostgresTests(SQLTests):
     @classmethod
     def setUpClass(self):
-        self.db = SQL("postgresql://postgres:postgres@localhost/cs50_sql_tests")
+        self.db = SQL("postgresql://postgres@localhost/cs50_sql_tests")
 
     def setUp(self):
         self.db.execute("CREATE TABLE cs50 (id SERIAL PRIMARY KEY, val VARCHAR(16))")
@@ -121,8 +121,8 @@ class SQLiteTests(SQLTests):
 if __name__ == "__main__":
     suite = unittest.TestSuite([
         unittest.TestLoader().loadTestsFromTestCase(SQLiteTests),
-        # unittest.TestLoader().loadTestsFromTestCase(MySQLTests),
-        # unittest.TestLoader().loadTestsFromTestCase(PostgresTests)
+        unittest.TestLoader().loadTestsFromTestCase(MySQLTests),
+        unittest.TestLoader().loadTestsFromTestCase(PostgresTests)
     ])
 
     unittest.TextTestRunner(verbosity=2).run(suite)

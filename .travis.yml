@@ -1,11 +1,17 @@
-sudo: required
-
-services: docker
-
 language: python
 
 python: "3.4"
 
-install: docker pull cs50/cli
+services:
+  - mysql
+  - postgres
 
-script: docker run -v${TRAVIS_BUILD_DIR}:/root/python-cs50/ --rm cs50/cli cd python-cs50; make install; python test/sqltests.py
+before_install:
+  - make build
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS cs50_sql_tests;'
+  - psql -c 'create database cs50_sql_tests;' -U postgres
+  - pip install mysqlclient psycopg2
+
+install: make install
+
+script: python test/sqltests.py
