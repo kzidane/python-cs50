@@ -1,34 +1,11 @@
+sudo: required
+
+services: docker
+
 language: python
 
 python: "3.4"
 
-# don't build tags
-branches:
-  except: /^v\d/
+install: docker pull cs50/cli
 
-# build sdist
-script: make build
-
-# install twine for uploading to PyPI
-before_deploy: pip install twine
-
-deploy:
-
-  # create github release
-  - provider: script
-    script: 'curl --fail --data "{ \"tag_name\": \"v$(python setup.py --version)\", \"target_commitish\": \"$TRAVIS_COMMIT\", \"name\": \"v$(python setup.py --version)\" }" --user bot50:$GITHUB_TOKEN https://api.github.com/repos/$TRAVIS_REPO_SLUG/releases'
-    on:
-      branch: master
-
-  # deploy to PyPI
-  - provider: script
-
-    # upload sdist to PyPI
-    script: twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD dist/*
-
-    # avoid stashing sdist
-    skip_cleanup: true
-
-    # deploy on commits to master
-    on:
-      branch: master
+script: docker run -v${TRAVIS_BUILD_DIR}:/root/python-cs50/ --rm cs50/cli cd python-cs50; make install; python test/sqltests.py
