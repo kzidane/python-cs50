@@ -87,7 +87,7 @@ class MySQLTests(SQLTests):
     def test_insert_returns_last_row_id(self):
         self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('foo')"), 1)
         self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('bar')"), 2)
-        self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('baz'); INSERT INTO cs50(val) VALUES('qux');"), 2)
+        self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('baz'); INSERT INTO cs50(val) VALUES('qux');"), 4)
 
 class PostgresTests(SQLTests):
     @classmethod
@@ -107,7 +107,7 @@ class PostgresTests(SQLTests):
     def test_insert_returns_last_row_id(self):
         self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('foo') RETURNING id"), [{"id": 1}])
         self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('bar') RETURNING id"), [{"id": 2}])
-        self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('baz'); INTO cs50(val) VALUES('qux') RETURNING id"), [{"id": 4}])
+        self.assertEqual(self.db.execute("INSERT INTO cs50(val) VALUES('baz'); INSERT INTO cs50(val) VALUES('qux') RETURNING id"), [{"id": 4}])
 
 
 class SQLiteTests(SQLTests):
