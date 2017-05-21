@@ -7,11 +7,12 @@ services:
   - postgres
 
 before_install:
-  - make build
   - mysql -e 'CREATE DATABASE IF NOT EXISTS cs50_sql_tests;'
   - psql -c 'create database cs50_sql_tests;' -U postgres
   - pip install mysqlclient psycopg2
 
-install: make install
+install:
+  - python setup.py sdist
+  - pip install dist/*.tar.gz
 
 script: python test/sqltests.py
